@@ -12,5 +12,7 @@ public sealed class ApplicationUser : IdentityUser
 
     public List<RefreshToken> RefreshTokens { get; set; } = [];
 
+    public  ICollection<Order> Orders { get; set; } = [];
 }
+
 

@@ -3,6 +3,7 @@ using GUP.Ecommerce.Authentication;
 using GUP.Ecommerce.Errors;
 using GUP.Ecommerce.RoleServices.Services;
 using GUP.Ecommerce.Services;
+using GUP.Ecommerce.Services.CategoryServices;
 using GUP.Ecommerce.Settings;
 using GUP.Ecommerce.UserServices.Services;
 using MapsterMapper;
@@ -30,7 +31,6 @@ public static class DependencyInjection
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowAnyOrigin()
-            //.WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!)
             )
         );
 
@@ -52,11 +52,12 @@ public static class DependencyInjection
         services.AddScoped<IEmailSender, EmailService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-        //services.AddBackgroundJobsConfig(configuration);
+        
 
         services.AddHttpContextAccessor();
 
@@ -177,17 +178,4 @@ public static class DependencyInjection
         return services;
     }
 
-    //private static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services,
-    //    IConfiguration configuration)
-    //{
-    //    services.AddHangfire(config => config
-    //        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    //        .UseSimpleAssemblyNameTypeSerializer()
-    //        .UseRecommendedSerializerSettings()
-    //        .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
-
-    //    services.AddHangfireServer();
-
-    //    return services;
-    //}
 }

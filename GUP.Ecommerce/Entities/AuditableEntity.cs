@@ -7,6 +7,8 @@ public class AuditableEntity
     public string? UpdatedById { get; set; }
     public DateTime? UpdatedOn { get; set; }
 
+    public bool  IsDeleted { get; set; }
+
     public ApplicationUser CreatedBy { get; set; } = default!;
     public ApplicationUser? UpdatedBy { get; set; }
 }
