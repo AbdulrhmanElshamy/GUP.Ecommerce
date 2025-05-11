@@ -4,6 +4,7 @@ using GUP.Ecommerce.Errors;
 using GUP.Ecommerce.RoleServices.Services;
 using GUP.Ecommerce.Services;
 using GUP.Ecommerce.Services.CategoryServices;
+using GUP.Ecommerce.Services.ProductServices;
 using GUP.Ecommerce.Settings;
 using GUP.Ecommerce.UserServices.Services;
 using MapsterMapper;
@@ -53,6 +54,7 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IProductService, ProductService>();
 
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
