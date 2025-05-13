@@ -50,7 +50,6 @@ namespace GUP.Ecommerce.Services.ProductServices
         {
             var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.ProductStocks)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
@@ -107,6 +106,12 @@ namespace GUP.Ecommerce.Services.ProductServices
                 return Result.Failure<ProductResponse>(ProductErrors.ProducImageInvalid);
 
 
+            if(request.Images.Any())
+                foreach (var item in request.Images)
+                    product.ProductImages.Add(new ProductImage { ImageUrl = FileUploader.SaveImage(item, _webHostEnvironment.ContentRootPath)});
+
+
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
@@ -116,7 +121,7 @@ namespace GUP.Ecommerce.Services.ProductServices
         public async Task<Result<ProductResponse>> UpdateAsync(Guid id, ProductRequest request)
         {
 
-            var existingProduct = await _context.Products.FindAsync(id);
+            var existingProduct = await _context.Products.Include(c => c.ProductImages).FirstOrDefaultAsync(c=> c.Id == id);
             if (existingProduct == null)
                 return Result.Failure<ProductResponse>(ProductErrors.ProductNotFound);
 
@@ -128,7 +133,6 @@ namespace GUP.Ecommerce.Services.ProductServices
             existingProduct.NameArabic = request.NameArabic;
             existingProduct.Description = request.Description;
             existingProduct.Price = request.Price;
-            existingProduct.DiscountPrice = request.DiscountPrice;
             existingProduct.SKU = request.SKU;
             existingProduct.CategoryId = request.CategoryId;
             existingProduct.IsFeatured = request.IsFeatured;
@@ -140,6 +144,14 @@ namespace GUP.Ecommerce.Services.ProductServices
                 if (string.IsNullOrEmpty(existingProduct.ImageUrl))
                     return Result.Failure<ProductResponse>(ProductErrors.ProducImageInvalid);
             }
+
+            if (existingProduct.ProductImages.Any())
+                foreach (var item in existingProduct.ProductImages)
+                FileUploader.DeleteImage(item.ImageUrl, _webHostEnvironment.WebRootPath);
+
+            if (request.Images.Any())
+                foreach (var item in request.Images)
+                    existingProduct.ProductImages.Add(new ProductImage { ImageUrl = FileUploader.SaveImage(item, _webHostEnvironment.ContentRootPath) });
 
 
             await _context.SaveChangesAsync();

@@ -12,7 +12,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
      public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductStock> ProductStocks { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -41,11 +42,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
           .HasForeignKey(p => p.CategoryId)
           .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<ProductStock>()
-            .HasOne(ps => ps.Product)
-            .WithMany(p => p.ProductStocks)
-            .HasForeignKey(ps => ps.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Order>()
             .HasOne(o => o.User)

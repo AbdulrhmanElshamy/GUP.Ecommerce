@@ -22,5 +22,7 @@ namespace GUP.Ecommerce.Contracts.Products
 
         public bool IsFeatured { get; set; } = false;
 
+        public virtual ICollection<string> Images{ get; set; } = [];
+
     }
 }
